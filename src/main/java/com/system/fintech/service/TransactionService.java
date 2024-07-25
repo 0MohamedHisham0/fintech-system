@@ -24,7 +24,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     @Transactional
-    public void deposit(Long userId, BigDecimal amount, TokenUser currentUser) {
+    public Transaction deposit(Long userId, BigDecimal amount, TokenUser currentUser) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
         Transaction transaction = Transaction.builder()
@@ -35,15 +35,17 @@ public class TransactionService {
 
         if (currentUser.getUserType() == UserTypeEnum.ADMIN) transaction.setAdminId(currentUser.getUserId());
 
-        transactionRepository.save(transaction);
+        Transaction createdTransaction = transactionRepository.save(transaction);
 
         BigDecimal newBalance = user.getBalance().add(amount);
-        userRepository.update(userId, newBalance, user.getBalance());
+        int affectedRows = userRepository.update(userId, newBalance, user.getBalance());
+        if (affectedRows != 1) throw new CustomException("Failed To Update Balance");
+        return createdTransaction;
     }
 
 
     @Transactional
-    public void withdraw(Long userId, BigDecimal amount, TokenUser currentUser) {
+    public Transaction withdraw(Long userId, BigDecimal amount, TokenUser currentUser) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
         if (user.getBalance().compareTo(amount) < 0) {
@@ -58,10 +60,15 @@ public class TransactionService {
 
         if (currentUser.getUserType() == UserTypeEnum.ADMIN) transaction.setAdminId(currentUser.getUserId());
 
-        transactionRepository.save(transaction);
+        Transaction createdTransaction = transactionRepository.save(transaction);
 
         BigDecimal newBalance = user.getBalance().subtract(amount);
-        userRepository.update(userId, newBalance, user.getBalance());
+        int affectedRows = userRepository.update(userId, newBalance, user.getBalance());
+        if (affectedRows != 1) {
+            throw new CustomException("Failed To Update Balance");
+        }
+
+        return createdTransaction;
     }
 
 

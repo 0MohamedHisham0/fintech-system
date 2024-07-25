@@ -43,10 +43,8 @@ public class UserService {
     public TokenResponse login(LoginRequest loginRequest) {
         final String email = loginRequest.getEmail();
         final String password = loginRequest.getPassword();
-        System.out.println(email);
 
         User user = userRepository.findOneByEmail(email);
-        System.out.println(user);
         if (user == null) throw new CustomException(INVALID_USERNAME_OR_PASSWORD);
 
         boolean isPasswordValid = bCryptPasswordEncoder.matches(password, user.getPassword());
@@ -55,8 +53,6 @@ public class UserService {
         TokenUser userToken = TokenUser
                 .builder()
                 .userId(user.getId())
-                .username(user.getUsername())
-                .name(user.getName())
                 .userType(UserTypeEnum.USER)
                 .build();
 

@@ -18,12 +18,8 @@ public class JwtTokenManager {
 
     public String generateToken(TokenUser tokenUser) {
         return JWT.create()
-                .withClaim(Constants.JwtClaims.EMAIL, tokenUser.getEmail())
-                .withClaim(Constants.JwtClaims.NAME, tokenUser.getName())
                 .withClaim(Constants.JwtClaims.USER_ID, tokenUser.getUserId())
                 .withClaim(Constants.JwtClaims.USER_TYPE, tokenUser.getUserType().name())
-                .withClaim(Constants.JwtClaims.USER_NAME, tokenUser.getUsername())
-                .withClaim(Constants.JwtClaims.ADMIN_ROLE_ID, tokenUser.getAdminRoleId())
                 .withIssuedAt(new Date(System.currentTimeMillis()).toInstant())
                 .sign(Algorithm.HMAC256(secretKey));
     }

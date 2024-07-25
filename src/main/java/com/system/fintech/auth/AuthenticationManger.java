@@ -23,17 +23,7 @@ public class AuthenticationManger {
 
             UserTypeEnum userType = UserTypeEnum.valueOf(jwt.getClaim(Constants.JwtClaims.USER_TYPE));
             Long userId = jwt.getClaim(Constants.JwtClaims.USER_ID);
-            String email = jwt.getClaim(Constants.JwtClaims.EMAIL);
-            String userName = jwt.getClaim(Constants.JwtClaims.USER_NAME);
-            String name = jwt.getClaim(Constants.JwtClaims.NAME);
-
-
-            Long adminRoleId = null;
-            if (userType == UserTypeEnum.ADMIN) {
-                adminRoleId = jwt.getClaim(Constants.JwtClaims.ADMIN_ROLE_ID);
-            }
-
-            return TokenUser.builder().userId(userId).email(email).username(userName).name(name).userType(userType).adminRoleId(adminRoleId).build();
+            return TokenUser.builder().userId(userId).userType(userType).build();
         }
 
         return null;

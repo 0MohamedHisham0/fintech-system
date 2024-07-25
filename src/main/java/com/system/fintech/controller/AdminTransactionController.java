@@ -2,6 +2,7 @@ package com.system.fintech.controller;
 
 import com.system.fintech.auth.AuthenticationManger;
 import com.system.fintech.dto.TokenUser;
+import com.system.fintech.model.Transaction;
 import com.system.fintech.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +24,18 @@ public class AdminTransactionController {
 
     @PostMapping("/deposit")
     @PreAuthorize("hasAuthority('user:depositFund')")
-    public ResponseEntity<String> deposit(@RequestParam Long userId, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Transaction> deposit(@RequestParam Long userId, @RequestParam BigDecimal amount) {
         TokenUser user = authenticationManger.getAuthenticatedUserData();
-        transactionService.deposit(userId, amount, user);
-        return ResponseEntity.ok("Funds deposited successfully.");
+        Transaction transaction = transactionService.deposit(userId, amount, user);
+        return ResponseEntity.ok(transaction);
     }
 
     @PostMapping("/withdraw")
     @PreAuthorize("hasAuthority('user:withdrawFund')")
-    public ResponseEntity<String> withdraw(@RequestParam Long userId, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Transaction> withdraw(@RequestParam Long userId, @RequestParam BigDecimal amount) {
         TokenUser user = authenticationManger.getAuthenticatedUserData();
-        transactionService.withdraw(userId, amount, user);
-        return ResponseEntity.ok("Funds withdrawn successfully.");
+        Transaction transaction = transactionService.withdraw(userId, amount, user);
+        return ResponseEntity.ok(transaction);
     }
 
 }

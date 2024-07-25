@@ -62,10 +62,6 @@ public class AdminService {
         TokenUser userToken = TokenUser
                 .builder()
                 .userId(admin.getId())
-                .username(admin.getUsername())
-                .name(admin.getName())
-                .email(email)
-                .adminRoleId(admin.getAdminRoleId())
                 .userType(UserTypeEnum.ADMIN)
                 .build();
 

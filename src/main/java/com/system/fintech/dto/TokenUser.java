@@ -16,12 +16,5 @@ import java.util.Date;
 public class TokenUser {
     private Long userId;
     private UserTypeEnum userType;
-    private Long adminRoleId;
-    private String name;
-    private String username;
-    private String phoneNumber;
-    private String password;
-    private String email;
-    private Boolean isActive;
     private Date createdAt;
 }

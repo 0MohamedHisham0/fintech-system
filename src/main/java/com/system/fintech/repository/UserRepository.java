@@ -41,14 +41,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     );
 
     @Transactional
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = """
             UPDATE "user"
             SET balance = :newBalance
             WHERE id = :id
             AND balance = :oldBalance
-            """
-            , nativeQuery = true)
+            """, nativeQuery = true)
     int update(
             @Param("id") Long userId,
             @Param("newBalance") BigDecimal newBalance,
